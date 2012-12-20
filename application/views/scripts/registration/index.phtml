@@ -1,0 +1,8 @@
+<div id='registration_errors'>	
+<?php	
+	$arrMessages = $this->form->getMessages();
+	foreach($arrMessages as $field => $arrErrors) { ?>
+	    <?=$this->formErrors($arrErrors)?>  
+	<?php } ?>	
+</div>
+	<?=$this->form?>
