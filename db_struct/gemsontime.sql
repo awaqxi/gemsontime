@@ -3,7 +3,7 @@
 # Server version:               5.5.22-0ubuntu1
 # Server OS:                    debian-linux-gnu
 # HeidiSQL version:             6.0.0.3603
-# Date/time:                    2012-12-20 19:35:39
+# Date/time:                    2012-12-20 20:15:11
 # --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -12,29 +12,51 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 # Dumping database structure for gemsontime
+DROP DATABASE IF EXISTS `gemsontime`;
 CREATE DATABASE IF NOT EXISTS `gemsontime` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `gemsontime`;
 
 
 # Dumping structure for table gemsontime.event
+DROP TABLE IF EXISTS `event`;
 CREATE TABLE IF NOT EXISTS `event` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `user_id` int(10) DEFAULT '0',
   `name` varchar(255) DEFAULT NULL,
   `date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 # Dumping data for table gemsontime.event: ~2 rows (approximately)
 DELETE FROM `event`;
 /*!40000 ALTER TABLE `event` DISABLE KEYS */;
 INSERT INTO `event` (`id`, `user_id`, `name`, `date`) VALUES
 	(1, 1, 'Событие 1', '2012-12-13 19:51:09'),
-	(2, 1, 'Событие 2', '2012-12-13 19:54:11');
+	(2, 1, 'Событие 2', '2012-12-13 19:54:11'),
+	(3, 11, 'Событие 3', '2012-12-20 20:04:44'),
+	(4, 11, 'Событие 4', '2012-12-20 21:04:44');
 /*!40000 ALTER TABLE `event` ENABLE KEYS */;
 
 
+# Dumping structure for table gemsontime.friend
+DROP TABLE IF EXISTS `friend`;
+CREATE TABLE IF NOT EXISTS `friend` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) NOT NULL,
+  `friend_user_id` int(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+# Dumping data for table gemsontime.friend: ~0 rows (approximately)
+DELETE FROM `friend`;
+/*!40000 ALTER TABLE `friend` DISABLE KEYS */;
+INSERT INTO `friend` (`id`, `user_id`, `friend_user_id`) VALUES
+	(1, 1, 11);
+/*!40000 ALTER TABLE `friend` ENABLE KEYS */;
+
+
 # Dumping structure for table gemsontime.user
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -43,9 +65,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   `is_confirmed` int(11) DEFAULT '0',
   `check_sum` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
-# Dumping data for table gemsontime.user: ~1 rows (approximately)
+# Dumping data for table gemsontime.user: ~2 rows (approximately)
 DELETE FROM `user`;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`id`, `name`, `password`, `email`, `is_confirmed`, `check_sum`) VALUES
