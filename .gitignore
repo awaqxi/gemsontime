@@ -1,5 +1,8 @@
 /docs/
 /library/
 /tests/
+<<<<<<< HEAD
 *.cache
 *.log
+=======
+>>>>>>> 2543bf38931d8f94b95ed32d0d5e4f1d3801e75b
