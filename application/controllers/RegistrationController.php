@@ -79,6 +79,7 @@ class RegistrationController extends Zend_Controller_Action
 		}
 		else
 		{
+			//TODO попробовать $this->_redirect($url);
 			$this->_helper->redirector->gotoSimple('index', 'index');	
 		}				
 	}

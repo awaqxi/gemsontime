@@ -14,7 +14,8 @@ class EventsController extends Zend_Controller_Action
     }
 	
 	public function listAction()
-	{	
+	{
+		//TODO сделать получение userID из сессии, а не из параметра запроса
 		$events = Model_Event::getUserEvents($this->getRequest()->getParam("userID"), 
 		                                     $this->getRequest()->getParam("bDate"), 
 		                                     $this->getRequest()->getParam("eDate"));

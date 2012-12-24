@@ -7,7 +7,7 @@ class Application_Form_Registration extends Zend_Form
 		$this->setAttrib('class', 'form-horizontal')
 		     ->setMethod('post')
 			 ->setFields();
-		
+		//TODO добавить action	Zend_Controller_Front::getInstance()->getBaseUrl()
 	}
 	
 	private function setFields()

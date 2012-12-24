@@ -8,20 +8,29 @@ class Model_DbTable_Event extends Zend_Db_Table_Abstract
     {
         $dbAdapter = $this->getAdapter();
         $result = $dbAdapter->fetchAll("
-            select id, user_id, name, date
-            from event
-            where user_id = :userID
-                  and date >= :bDate
-                  and date <= :eDate
-            union all
-            select e.id, e.user_id, name, date
+            select e.id, 1 as is_mine, e.name, e.date
 			from event e
+			     join participant p
+			          on p.event_id = e.id
+			where p.user_id = :userID
+			      and e.date >= :bDate
+			      and e.date <= :eDate
+			union all
+			select distinct
+			 e.id, 0 as is_mine, e.name, e.date
+			from event e
+			     join participant p
+				       on p.event_id = e.id
 			     join friend f
-			          on e.user_id = f.friend_user_id
-			where f.user_id = :userID
-			      and date >= :bDate
-                  and date <= :eDate
-            order by user_id, date     
+				       on p.user_id = f.friend_user_id
+			where f.user_id =  :userID
+			      and not exists (select id
+			                      from participant pp
+			                      where pp.event_id = e.id
+			                            and pp.user_id = f.user_id)
+			      and e.date >= :bDate
+			      and e.date <= :eDate
+            order by is_mine, date     
         ", array("userID"=>$userID, "bDate"=>$bDate, "eDate"=>$eDate));   
         
         return $result;

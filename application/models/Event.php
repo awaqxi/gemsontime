@@ -12,7 +12,7 @@ class Model_Event
             $event = new Model_Entity_Event();
             $event->setID($object['id']);
             $event->setName($object['name']);
-            $event->setUserID($object['user_id']);
+            $event->setIsMine($object['is_mine']);
             $event->setDate($object['date']);
             
             $events[] = $event;

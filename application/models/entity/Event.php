@@ -4,8 +4,8 @@ class Model_Entity_Event
 {
     private $id;
 	private $name;
-	private $user_id;
 	private $date;
+	private $is_mine;
 	
     public function setID($value)
     {
@@ -27,16 +27,6 @@ class Model_Entity_Event
 		return $this->name;
 	}
 	
-	public function setUserID($value)
-	{
-		$this->user_id = $value;
-	}
-	
-	public function getUserID()
-	{
-		return $this->user_id;
-	}
-	
 	public function setDate($value)
 	{
 		$this->date = $value;
@@ -46,12 +36,22 @@ class Model_Entity_Event
 	{
 		return $this->date;
 	}
+	
+	public function setIsMine($value)
+	{
+		$this->is_mine = $value;
+	}
+	
+	public function getIsMine()
+	{
+		return $this->is_mine;
+	}
     
     public function getArray()
     {        
         $values = array("id" => $this->id, 
                         "name" => $this->name, 
-                        "userID" => $this->user_id, 
+                        "isMine" => $this->is_mine, 
                         "date" => $this->date);
                         
         return ($values);

@@ -102,7 +102,7 @@ var oTimeMap = {
 	,xEnd				:0
 	,xScrollStep		:1000
 	//,urlGetEvents 		:"http://localhost:8888/Scrolling/GetEvents.php"
-	,urlGetEvents 		:"http://localhost/gemsontime/public/events"
+	,urlGetEvents 		:"/events"
 	,iMyLineCount		:0
 	,iOtherLineCount	:0
 	,arrMyLines 		:[]
