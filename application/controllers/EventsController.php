@@ -28,7 +28,7 @@ class EventsController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(true);
 		$this->_helper->layout()->disableLayout(); 
         $response = $this->getResponse();
-        $response->setHeader('Content-type', 'application/json;charset=UTF-8', true);
+        //$response->setHeader('Content-type', 'application/json;charset=UTF-8', true);
                
         return $response->setBody(Zend_Json::encode($objects));
 	}
