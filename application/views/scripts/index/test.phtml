@@ -9,7 +9,14 @@
 			success: function(data){	
 				for (var key in data) {
 					e = new Event();
+<<<<<<< HEAD
 					e.init(data[key]);
+=======
+					e.id = data[key]['id'];
+					e.name = data[key]['name'];
+					e.isMine = data[key]['isMine'];
+					e.date = data[key]['date'];
+>>>>>>> a98e45b802a9f5b5801b272022b1cd0851c3b8b5
 					
 					$('#wrapper').append(e.render());
 				}
