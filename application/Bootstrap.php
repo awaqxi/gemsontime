@@ -34,8 +34,7 @@
 							 
 			$view->headScript()->appendFile('http://code.jquery.com/jquery-latest.js', 'text/javascript')
 			                   ->appendFile($view->serverUrl() . '/assets/js/bootstrap.min.js', 'text/javascript')
-							   ->appendFile($view->serverUrl() . '/assets/js/jquery.overscroll.min.js', 'text/javascript')
-							   ->appendFile($view->serverUrl() . '/assets/js/script.js', 'text/javascript');
+							   ->appendFile($view->serverUrl() . '/assets/js/jquery.overscroll.min.js', 'text/javascript');
 				 
 							 
 		}
