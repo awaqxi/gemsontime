@@ -2,7 +2,7 @@
     
 class Model_Entity_Friend
 {
-	private $id, $user_id, $friend_user_id;	
+	private $id, $userID, $friendUserID;	
 	
 	public function setID($value)
 	{
@@ -16,21 +16,21 @@ class Model_Entity_Friend
 	
 	public function setUserID($value)
 	{
-		$this->user_id = $value;
+		$this->userID = $value;
 	}
 	
 	public function getUserID()
 	{
-		return $this->user_id;
+		return $this->userID;
 	}
 	
 	public function setFriendUserID($value)
 	{
-		$this->friend_user_id = $value;
+		$this->friendUserID = $value;
 	}
 	
 	public function getFriendUserID()
 	{
-		return $this->friend_user_id;
+		return $this->friendUserID;
 	}
 }

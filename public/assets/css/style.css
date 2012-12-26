@@ -30,3 +30,10 @@ div.event span.event_title
 	font-size: 0.8em;
 	width: 100%;	
 }
+
+div.event a.event_add_url
+{
+	float: right;
+	color: white;
+	font-size: 1.2em;
+}

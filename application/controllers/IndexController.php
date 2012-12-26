@@ -12,10 +12,13 @@ class IndexController extends Zend_Controller_Action
     {
     	$this->view->headScript()->appendFile($this->view->serverUrl() . '/assets/js/script.js', 'text/javascript')
 				                 ->appendFile($this->view->serverUrl() . '/assets/js/event.js', 'text/javascript');
+								 
+		$this->view->headLink()->appendStylesheet($this->view->serverUrl().'/assets/css/events.css');
     }
 	
 	public function testAction()
     {	
         $this->view->headScript()->appendFile($this->view->serverUrl() . '/assets/js/event.js', 'text/javascript');
+		$this->view->headLink()->appendStylesheet($this->view->serverUrl().'/assets/css/events.css');
     }
 }

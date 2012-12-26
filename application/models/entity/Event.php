@@ -2,11 +2,8 @@
     
 class Model_Entity_Event
 {
-    private $id;
-	private $name;
-	private $date;
-	private $is_mine;
-	
+    private $id, $name, $date, $isMine, $groupsTypes = array();
+		
     public function setID($value)
     {
         $this->id = $value;
@@ -39,20 +36,36 @@ class Model_Entity_Event
 	
 	public function setIsMine($value)
 	{
-		$this->is_mine = $value;
+		$this->isMine = $value;
 	}
 	
 	public function getIsMine()
 	{
-		return $this->is_mine;
+		return $this->isMine;
 	}
+	
+	public function setGroupsTypes($value)
+	{
+		$this->groupsTypes = $value;
+	}
+	
+	public function getGroupsTypes()
+	{
+		return $this->groupsTypes;
+	}
+	
+	public function addGroupType($value)
+	{
+		$this->groupsTypes[] = $value;
+	}	
     
     public function getArray()
     {        
         $values = array("id" => $this->id, 
                         "name" => $this->name, 
-                        "isMine" => $this->is_mine, 
-                        "date" => $this->date);
+                        "isMine" => $this->isMine, 
+                        "date" => $this->date,
+						"groupsTypes" => $this->groupsTypes);
                         
         return ($values);
     }
