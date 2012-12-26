@@ -147,6 +147,8 @@ var oTimeMap = {
 				'</div>';
 		$('#timemap').html(s);
 
+		if(bDebug)console.log("--=== drawTimeMap ===--");
+
 		// обнуление глоб.переменных перед
 		this.iMyLineCount = 0;
 		this.iOtherLineCount	= 0;
@@ -375,13 +377,13 @@ var oTimeMap = {
 		p_oEvent.dateCap = min;
 		if(bDebug)console.log("date: "+date+". min: "+min);
 
-		var divID = "Event_"+p_oEvent.id;
-		var str =
-			"<div id='"+divID+"' class='"+divClass+"'>"+
-			"<div>"+p_oEvent.name+". "+p_oEvent.id+"</div>"+
-			"<div>"+p_oEvent.dateCap+"</div>"+
-			"<div>"+p_oEvent.xBegin+"</div>"+
-			"</div>";
+		// var divID = "Event_"+p_oEvent.id;
+		// var str =
+		// 	"<div id='"+divID+"' class='"+divClass+"'>"+
+		// 	"<div>"+p_oEvent.name+". "+p_oEvent.id+"</div>"+
+		// 	"<div>"+p_oEvent.dateCap+"</div>"+
+		// 	"<div>"+p_oEvent.xBegin+"</div>"+
+		// 	"</div>";
 
 		// нарастим линию по длине
 		oLine 	= p_arrLine[p_SelectedLine];
@@ -389,10 +391,13 @@ var oTimeMap = {
 		$(oLine.divID).css("width",xEnd);
 
 		// добавим событие на линию
-		$(oLine.divID).append(str);
-
-		$("#"+divID).css("left",xBegin);
-		if(bDebug)console.log("divID: "+divID+". xBegin: "+xBegin+", diff:");
+		e = new Event();
+		e.init(p_oEvent);
+		divID = "#event_"+e.id;
+		$(oLine.divID).append(e.render());
+		// $(divID).css("left",xBegin);
+		// if(bDebug)console.log($(divID));
+		// if(bDebug)console.log("-------------divID: "+divID+". xBegin: "+xBegin);
 
 		this.drawEventPoint(divID,p_oEvent);
 

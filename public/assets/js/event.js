@@ -6,11 +6,13 @@ Event.prototype = {
 	isMine: 0,
 	date: '',
 	groupCSS: '',
+	xBegin: 0,
 	init: function(entry){
 		this.id = entry['id'];
 		this.name = entry['name'];
 		this.isMine = entry['isMine'];
 		this.date = entry['date'];
+		this.xBegin = entry['xBegin'];
 		for (var key in entry['groupsTypes']) {
 			
 			if(entry['groupsTypes'][key]['isMain'] === '1')
@@ -28,6 +30,10 @@ Event.prototype = {
 		{			
 			element.addClass(this.groupCSS);     
 		}       
+
+		element.css("left",this.xBegin);
+		if(bDebug)console.log("+++++ xBegin:"+this.xBegin);
+
 		//название        
 		var name = $('<span>', {class: 'event_name'}).html(this.name);	
 		element.append(name);
