@@ -101,7 +101,6 @@ var oTimeMap = {
 	xBegin				:0
 	,xEnd				:0
 	,xScrollStep		:1000
-	//,urlGetEvents 		:"http://localhost:8888/Scrolling/GetEvents.php"
 	,urlGetEvents 		:"/events"
 	,iMyLineCount		:0
 	,iOtherLineCount	:0
@@ -212,7 +211,6 @@ var oTimeMap = {
 		var s;
 
 		while(dateCurrent<=this.datePeriodEnd){
-			// if(bDebug)console.log("dateCurrent: "+dateCurrent);
 			sdate = DateFuncs.getHourMinut(dateCurrent);
 
 			s = "<li style='width:"+step+"px;'>"+sdate+"</li>";
@@ -286,7 +284,7 @@ var oTimeMap = {
 			$("#timemap_curtain").hide();
 
 			// почему-то навешивание обработчика срабатывает только здесь. вообще надо бы отсюда куда-нить перенести
-			$(".section").click(oTimeMap.scrollLeft_byDiv);
+			$(".event").click(oTimeMap.scrollLeft_byDiv);
 			$(".EventPoint").click(oTimeMap.scrollLeft_byDiv);
 		}
 
@@ -315,7 +313,7 @@ var oTimeMap = {
 
 		var classLine;
 		// ВЫБЕРЕМ Мое или Чужое событие
-		if(oEvent.IsMine==1) {
+		if(oEvent.isMine==1) {
 			iLineCount 	= this.iMyLineCount;
 			arrLines	= this.arrMyLines;
 			classLine	= "MineLine";
@@ -345,7 +343,7 @@ var oTimeMap = {
 
 		if(SelectedLine==null){
 			// ни одна линия не выбрана, создаем
-			SelectedLine = this.addLine(oEvent);	// IsMine=1 - моя, 0-прочие
+			SelectedLine = this.addLine(oEvent);
 		}
 
 		// на этот момент SelectedLine выбрано в цикле или создано и равно 1
@@ -365,25 +363,10 @@ var oTimeMap = {
 
 		var xBegin = p_oEvent.xBegin;
 
-		// сгенерим карточку события
-		var divClass = "";
-		if(p_oEvent.IsMine==1)
-			divClass = "section blue";
-		else
-			divClass = "section green";
-
 		var date = DateFuncs.getDateFromString(p_oEvent.date);
 		var min = DateFuncs.getHourMinut(date);
 		p_oEvent.dateCap = min;
 		if(bDebug)console.log("date: "+date+". min: "+min);
-
-		// var divID = "Event_"+p_oEvent.id;
-		// var str =
-		// 	"<div id='"+divID+"' class='"+divClass+"'>"+
-		// 	"<div>"+p_oEvent.name+". "+p_oEvent.id+"</div>"+
-		// 	"<div>"+p_oEvent.dateCap+"</div>"+
-		// 	"<div>"+p_oEvent.xBegin+"</div>"+
-		// 	"</div>";
 
 		// нарастим линию по длине
 		oLine 	= p_arrLine[p_SelectedLine];
@@ -395,11 +378,12 @@ var oTimeMap = {
 		e.init(p_oEvent);
 		divID = "#event_"+e.id;
 		$(oLine.divID).append(e.render());
-		// $(divID).css("left",xBegin);
+		if(bDebug)console.log("#event_ AFETR");
+		//$(divID).css("left",xBegin);
 		// if(bDebug)console.log($(divID));
 		// if(bDebug)console.log("-------------divID: "+divID+". xBegin: "+xBegin);
 
-		this.drawEventPoint(divID,p_oEvent);
+		this.drawEventPoint(p_oEvent);
 
 		// сохраним новый левый край линии
 		p_arrLine[p_SelectedLine].xEndLast = xEnd;
@@ -409,7 +393,7 @@ var oTimeMap = {
 
 
 //======================================================================================================
-	,drawEventPoint	:function( divID, p_oEvent ){
+	,drawEventPoint	:function( p_oEvent ){
 		if(bDebug)console.log("<<<<<<<  --- drawEventPoint...");
 
 		var divID = "EventPoint_"+p_oEvent.id;
@@ -433,7 +417,7 @@ var oTimeMap = {
 		if(bDebug)console.log("addLine... p_bMine: "+oEvent.IsMine);
 
 		// ВЫБЕРЕМ Мои или Чужие линии
-		if (oEvent.IsMine==1) {
+		if (oEvent.isMine==1) {
 			iLineCount 	= this.iMyLineCount;
 			arrLines	= this.arrMyLines;
 			divClass	= "MineLine";
@@ -460,7 +444,7 @@ var oTimeMap = {
 
 
 		// СОХРАНИМ Мои или Чужие линии
-		if (oEvent.IsMine==1) {
+		if (oEvent.isMine==1) {
 			this.iMyLineCount++;
 			this.arrMyLines.push(
 				{divID:"#"+divID}
@@ -485,7 +469,9 @@ $(document).ready(function() {
 	// // добавим обработчик на событие нажатия кнопки
 	$("#moveLeft").click(moveLeft);
 	$("#moveRight").click(moveRight);
+
 	$("#moveCenter").click(moveCenter);
+	// $("#moveCenter").click(Test);
 
 	// инициализация TimeMap
 	oTimeMap.Init();
@@ -505,5 +491,10 @@ function moveRight(){
 //---------------------------------------------------------------------------------------------------------
 function moveCenter(){
 	oTimeMap.moveCenter();
+}
+
+//---------------------------------------------------------------------------------------------------------
+function Test(){
+	if(bDebug)console.log("<<< TEST >>>");
 }
 

@@ -32,7 +32,6 @@ Event.prototype = {
 		}       
 
 		element.css("left",this.xBegin);
-		if(bDebug)console.log("+++++ xBegin:"+this.xBegin);
 
 		//название        
 		var name = $('<span>', {class: 'event_name'}).html(this.name);	
