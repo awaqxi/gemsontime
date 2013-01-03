@@ -9,28 +9,37 @@ class Model_Event
        
         $events = array();
 		$eventsIDs = array();
-        foreach ($result as $object) {
-            $event = new Model_Entity_Event();
-            $event->setID($object['id']);
-            $event->setName($object['name']);
-            $event->setIsMine($object['is_mine']);
-            $event->setDate($object['date']);
-            
+        foreach ($result as $object) {            
+			$event = Model_Event::getEntity($object);			
             $events[$object['id']] = $event;			
 			//зпоминаем ид всех событий
 			$eventsIDs[] = $object['id'];
         }
-        $event_groups_types = Model_Event::getEventGroupTypeRelation($eventsIDs);
-		foreach ($event_groups_types as $object) 
+		if(count($eventsIDs) > 0)
 		{
-			$eventID = $object['event_id'];
-			$events[$eventID]->addGroupType(array("groupName" => $object['group_name'],
-			                                      "groupCSS" => $object['group_css'],
-			                                      "typeName" => $object['type_name'],
-			                                      "isMain" => $object['is_main']));
+			//выбираем группы и типы событий
+	        $event_groups_types = Model_Event::getEventGroupTypeRelation($eventsIDs);
+			foreach ($event_groups_types as $object) 
+			{
+				$eventID = $object['event_id'];
+				$events[$eventID]->addGroupType(array("groupName" => $object['group_name'],
+				                                      "groupCSS" => $object['group_css'],
+				                                      "typeName" => $object['type_name'],
+				                                      "isMain" => $object['is_main']));
+			}
 		}
-		
         return $events;
+	}
+
+	private function getEntity($object)
+	{
+		$event = new Model_Entity_Event();
+        $event->setID($object['id']);
+        $event->setName($object['name']);
+        $event->setIsMine($object['is_mine']);
+        $event->setDate($object['date']);
+		
+		return $event;
 	}
 	
 	private static function getEventGroupTypeRelation($eventsIDs)

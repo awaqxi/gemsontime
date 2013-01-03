@@ -3,7 +3,7 @@
 	{
 		$.ajax({
 			type: "GET",
-			url: 'http://gemsontime.dev/events/1/2012-01-01/2012-12-31',
+			url: 'http://gemsontime.dev/events/1/2012-01-01/2013-12-31',
 			async : true,
 			dataType: "json",
 			success: function(data){	
@@ -11,9 +11,32 @@
 					e = new Event();
 					e.init(data[key]);
 					
-					$('#wrapper').append(e.render());
+					$('#timemap').append(e.render());
 				}
 			}
 			});
+		$("#event_group_switch button").bind("click", event_groups.switch);
 });
+
+var event_groups = {
+	switch: function(event){
+	    //
+	    if($(event.target).hasClass('active'))
+	    {
+	        $('div.' + event.target.id).show();
+	    }
+	    else
+	    {
+	        $('div.' + event.target.id).hide();
+	    }
+	}
+}
 </script>
+
+<div id='event_group_switch'>
+<?php foreach ($this->eventGroups as $object){?>
+	  	<button id = '<?=$object->getCSS()?>' class='btn btn-info' data-toggle="button"><?=$object->getName()?></button>	
+<?php } ?>
+</div>
+
+<div id="timemap"></div>
