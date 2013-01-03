@@ -3,5 +3,10 @@
 	<button id="moveCenter" style="width:40px; height:40px;">((()))</button>
 	<button id="moveRight" style="width:40px; height:40px; float: right;">>>></button>
 
+    <div id='event_group_switch'>
+    <?php foreach ($this->eventGroups as $object){?>
+            <button id = '<?=$object->getCSS()?>' class='btn btn-info' data-toggle="button"><?=$object->getName()?></button>    
+    <?php } ?>
+    </div>
 	<div id="timemap">
 </div>

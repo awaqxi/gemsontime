@@ -461,6 +461,19 @@ var oTimeMap = {
 	}
 };
 
+var event_groups = {
+	switch: function(event){
+	    //
+	    if($(event.target).hasClass('active'))
+	    {
+	        $('div.' + event.target.id).show();
+	    }
+	    else
+	    {
+	        $('div.' + event.target.id).hide();
+	    }
+	}
+}
 
 //---------------------------------------------------------------------------------------------------------
 $(document).ready(function() {
@@ -475,7 +488,9 @@ $(document).ready(function() {
 
 	// инициализация TimeMap
 	oTimeMap.Init();
-
+	
+	//привязываем обработчики нажатия кнопок фильтров
+	$("#event_group_switch button").bind("click", event_groups.switch);
 });
 
 //---------------------------------------------------------------------------------------------------------

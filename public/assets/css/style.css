@@ -12,7 +12,6 @@ div.event
 	-webkit-border-radius: 10px;
 	border: 2px solid black;
 	padding: 2px;	
-	position: absolute;
 }
 
 div.event:hover { background-color: cyan; }
