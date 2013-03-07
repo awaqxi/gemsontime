@@ -23,7 +23,9 @@ Event.prototype = {
 	},
 	//отображение события
 	render: function(){
-		var element = $('<div>', {id: 'event_' + this.id,
+		
+		var id = this.id;
+		var element = $('<div>', {id: 'event_' + id,
 		                          class: 'event'});
 		//категории
 		if(typeof(this.groupCSS) !== "undefined")
@@ -40,7 +42,8 @@ Event.prototype = {
 		if(this.isMine !== '1')
 		{
 			var addURL = $('<a>', {href: '#',
-			                       class: 'event_add_url'}).html('+');
+			                       class: 'event_add_url'}).html('+');					
+						                  
 			element.append(addURL);
 			
 		}	

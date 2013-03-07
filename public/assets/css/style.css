@@ -1,4 +1,4 @@
-#registration_errors
+#form_errors
 {
 	color: red;
 }
@@ -11,7 +11,8 @@ div.event
 	-moz-border-radius: 10px;	
 	-webkit-border-radius: 10px;
 	border: 2px solid black;
-	padding: 2px;	
+	padding: 2px;
+	position: absolute;	
 }
 
 div.event:hover { background-color: cyan; }
@@ -65,9 +66,9 @@ div.event a.event_add_url
 /*	RULER	-->*/
 #ruler { position: relative; }
 
-/*.NOWpoint { font-size:10px; width: 3em; height: 3em; -webkit-border-radius: 1.5em; -moz-border-radius: 1.5em; text-align: center; /*margin-top: 2em; background-color: blue; position: absolute;}*/
-.NOWpoint { font-size:15px; width: 10px; height: 100%; text-align: center; background-color: blue; position: absolute;}
-.NOWpoint:hover{background-color: cyan;}
+
+#NOWpoint {top: 0px; font-size:15px; width: 10px; height: 100%; text-align: center; background-color: blue; position: absolute;}
+#NOWpoint:hover{background-color: cyan;}
 
 .EventPoint { font-size:10px; width: 3em; height: 3em; -webkit-border-radius: 1.5em; -moz-border-radius: 1.5em; text-align: center; background-color: yellow; position: absolute;}
 /*.EventPoint { font-size:15px; width: 10px; height: 100%; text-align: center; background-color: yellow; position: absolute;}*/

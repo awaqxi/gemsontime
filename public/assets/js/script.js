@@ -1,107 +1,12 @@
-var bDebug = true;
+var bDebug = false;
 var o;
-
-
-//---------------------------------------------------------------------------------------------------------
-var DateFuncs = {
-
-	diffMinut: function(d1, d2) {
-        var t2 = d2.getTime();
-        var t1 = d1.getTime();
-
-        return parseInt((t2-t1)/(60*1000));
-    },
-
-	diffHours: function(d1, d2) {
-        var t2 = d2.getTime();
-        var t1 = d1.getTime();
-
-        return parseInt((t2-t1)/(3600*1000));
-    },
-
-    diffDays: function(d1, d2) {
-        var t2 = d2.getTime();
-        var t1 = d1.getTime();
-
-        return parseInt((t2-t1)/(24*3600*1000));
-    },
-	
-	diffWeeks: function(d1, d2) {
-        var t2 = d2.getTime();
-        var t1 = d1.getTime();
-
-        return parseInt((t2-t1)/(24*3600*1000*7));
-    },
-
-    diffMonths: function(d1, d2) {
-        var d1Y = d1.getFullYear();
-        var d2Y = d2.getFullYear();
-        var d1M = d1.getMonth();
-        var d2M = d2.getMonth();
-
-        return (d2M+12*d2Y)-(d1M+12*d1Y);
-    },
-
-    diffYears: function(d1, d2) {
-        return d2.getFullYear()-d1.getFullYear();
-    }
-
-    ,dateAdd:	function(datePart,Num,srcDate){
-    	var msAdd;
-    	switch(datePart)
-		{
-		case "m":
-		  msAdd = Num * 60*1000;
-		  break;
-		case "h":
-		  msAdd = Num * 3600*1000;
-		  break;
-		default:
-		  msAdd = 0;
-		}
-
-		srcDate = srcDate.getTime();
-
-    	return new Date(srcDate + msAdd);
-    }
-
-    ,getDateFromString: 	function (p_DateString){
-		if(p_DateString.length==0)return null;
-
-		var strDate = p_DateString.substring(0,10);	//"2012-12-31";
-
-		var strTime = p_DateString.substring(11,19); //"17:36:42";
-
-		var dateParts = strDate.split("-");
-		var timeParts = strTime.split(":");
-
-		var date = new Date(dateParts[0], (dateParts[1] - 1), dateParts[2], timeParts[0], timeParts[1], timeParts[2]);
-		return date;	
-	}
-
-	,getHourMinut: function(d) {
-        var sdate = "0"+d.getMinutes();
-
-		sdate = sdate.substring(sdate.length-2,sdate.length);
-		sdate = d.getHours()+":"+sdate;
-
-		return sdate;
-    }
-
-    ,getSQLdate: function(d) {
-        var sdate = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()
-        if(bDebug)console.log("getSQLdate. sdate: "+sdate);
-		return sdate;
-    }
-}
-
-
 //---------------------------------------------------------------------------------------------------------
 var oTimeMap = {
 	xBegin				:0
 	,xEnd				:0
 	,xScrollStep		:1000
 	,urlGetEvents 		:"/events"
+	,urlSubscribe 		:"/events/subscribe"
 	,iMyLineCount		:0
 	,iOtherLineCount	:0
 	,arrMyLines 		:[]
@@ -110,6 +15,7 @@ var oTimeMap = {
 	,xEventsPadding		:20
 	,iEventCount		:0
 	,arrEvents 			:[]
+	,arrEventsObj 		:[]
 	,dtNow 				:new Date()
 	,data 				:""
 	,datePeriodBegin	:""
@@ -120,12 +26,14 @@ var oTimeMap = {
 		if(bDebug)console.log("Init...");
 
 		var now = new Date();
+		
 		this.datePeriodBegin = DateFuncs.dateAdd("h",-3,now);
+		
 		this.datePeriodBegin.setHours(this.datePeriodBegin.getHours());
     	this.datePeriodBegin.setMinutes(0);
     	this.datePeriodBegin.setSeconds(0);
 
-		this.datePeriodEnd = DateFuncs.dateAdd("h",4,now);
+		this.datePeriodEnd = DateFuncs.dateAdd("h",3,now);
 		this.datePeriodEnd.setHours(this.datePeriodEnd.getHours());
     	this.datePeriodEnd.setMinutes(0);
     	this.datePeriodEnd.setSeconds(0);
@@ -155,6 +63,7 @@ var oTimeMap = {
 		this.arrOtherLines = [];
 		this.iEventCount = 0;
 		this.arrEvents = [];
+		this.arrEventsObj = [];
 
 		this.drawRuler();
 
@@ -163,9 +72,9 @@ var oTimeMap = {
 		// временно отключаем отрисовку событий
 		this.loadTimeData(this.datePeriodBegin,this.datePeriodEnd);
 
-		o = $('#timemap').overscroll({
+	/*	o = $('#timemap').overscroll({
 			wheelDirection: 'horizontal',
-		});
+		});*/
 
 		$("#timemap_curtain").hide();
 	}
@@ -229,7 +138,7 @@ var oTimeMap = {
 
 		var x = min*this.x1min;
 
-		var s = "<div id='NOWpoint' class='NOWpoint'>"+DateFuncs.getHourMinut(now)+"</div>";
+		var s = "<div id='NOWpoint'>"+DateFuncs.getHourMinut(now)+"</div>";
 		$("#timemap").append(s);
 		$("#NOWpoint").css("left",x);
 
@@ -289,9 +198,9 @@ var oTimeMap = {
 		}
 
 		// обновим скроллинг для увеличенной панели
-		o = $('#timemap').overscroll({
+		/*o = $('#timemap').overscroll({
 			wheelDirection: 'horizontal',
-		});
+		});*/
 
 		$("#NOWpoint").css("z-index",999999);
 	}
@@ -376,8 +285,12 @@ var oTimeMap = {
 		// добавим событие на линию
 		e = new Event();
 		e.init(p_oEvent);
+		this.arrEventsObj[e.id] = e;
 		divID = "#event_"+e.id;
 		$(oLine.divID).append(e.render());
+		
+		var addEventToMyLine = $.proxy(oTimeMap, "addEventToMyLine");	
+		$("#event_" + e.id + " a.event_add_url").click(addEventToMyLine);   
 		if(bDebug)console.log("#event_ AFETR");
 		//$(divID).css("left",xBegin);
 		// if(bDebug)console.log($(divID));
@@ -399,7 +312,7 @@ var oTimeMap = {
 		var divID = "EventPoint_"+p_oEvent.id;
 
 		var s = "<div id='"+divID+"' class='EventPoint'>"+p_oEvent.dateCap+"</div>";
-		$("#timemap").append(s);
+		$("#ruler").append(s);
 
 		if(bDebug)console.log("x: "+p_oEvent.xBegin);
 
@@ -436,16 +349,43 @@ var oTimeMap = {
 			"</div>";
 		if(bDebug)console.log("str="+str);
 
-		// добавим линию
-		if(iLineCount==0)	// линий вообще нет
-			$("#timemap").append(str);
-		else 				// добавляем после последней
-			$( arrLines[arrLines.length-1].divID ).after(str);
-
-
+		// добавим линию	
+		if(oEvent.isMine==1)
+		{
+			if(iLineCount==0)	
+			{
+				//первую "мою линию" добавляем в самый верх
+				$("#ruler").after(str);
+			}				
+			else 
+			{				
+				var myLineDivID = "MineLine_" + (this.iMyLineCount - 1);								
+				$("#" + myLineDivID).after(str);
+			}
+		}
+		else
+		{
+			if(iLineCount==0)	
+			{
+				if(this.iMyLineCount == 0)
+					$("#timemap").append(str);
+				else
+				{
+					//новую чужую линию добавляем после своих
+					var myLineDivID = "MineLine_" + (this.iMyLineCount - 1);								
+					$("#" + myLineDivID).after(str);
+				}						
+			}					
+			else 
+			{
+				$( arrLines[arrLines.length-1].divID ).after(str);
+			}
+				
+		}
+		
 		// СОХРАНИМ Мои или Чужие линии
 		if (oEvent.isMine==1) {
-			this.iMyLineCount++;
+			this.iMyLineCount++;			
 			this.arrMyLines.push(
 				{divID:"#"+divID}
 			);
@@ -459,6 +399,30 @@ var oTimeMap = {
 		// if(bDebug)console.log("str="+str);
 		return iLineCount++;
 	}
+	,addEventToMyLine: function(event){
+		var id = event.target.parentNode.id.substring(6);
+		
+		var URL = this.urlSubscribe + "/1" + "/" + id;	  	
+		var events = this.arrEventsObj;
+		var addLine = $.proxy(oTimeMap, "addLine");	
+		var lineCount = this.iMyLineCount;	
+				
+	  	$.getJSON(URL, function(data)
+	  	{
+	  		if(data.result = "OK")
+	  		{
+	  			var left = $("#" + event.target.parentNode.id).css('left');		
+				$("#" + event.target.parentNode.id).remove();
+				events[id].isMine = '1';
+				addLine(events[id]);		
+				$("#MineLine_" + (lineCount)).append(events[id].render());
+				$("#" + event.target.parentNode.id).css('left', left);
+	  		}	  		
+	  	});
+		
+		return false;
+	}
+	
 };
 
 var event_groups = {
@@ -484,7 +448,7 @@ $(document).ready(function() {
 	$("#moveRight").click(moveRight);
 
 	$("#moveCenter").click(moveCenter);
-	// $("#moveCenter").click(Test);
+	 $("#moveCenter").click(Test);
 
 	// инициализация TimeMap
 	oTimeMap.Init();

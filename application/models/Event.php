@@ -52,4 +52,18 @@ class Model_Event
 		
 		return $result;
 	}
+
+	public static function isEventExists($eventID)
+	{
+		$table = new Model_DbTable_Event();
+		$select = $table->select()
+		                ->where('id = ?', $eventID);
+		$result = $table->fetchAll($select);
+		
+		if(count($result) > 0)
+			return true;
+		else {
+			return false;
+		}
+	}
 }

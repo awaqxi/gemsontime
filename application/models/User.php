@@ -42,4 +42,18 @@ class Model_User
 		
 		$table->update($data, $where);
 	}
+	
+	public static function isUserExists($userID)
+	{
+		$table = new Model_DbTable_User();
+		$select = $table->select()
+		                ->where('id = ?', $userID);
+		$result = $table->fetchAll($select);
+		
+		if(count($result) > 0)
+			return true;
+		else {
+			return false;
+		}
+	}
 }

@@ -1,0 +1,14 @@
+<div id='form_errors'>  
+<?php   
+    if($this->invalid)
+    {
+        echo('<ul><li>Неправильная комбинация логин/пароль</li></ul>');
+    }
+    else 
+    {    
+    $arrMessages = $this->form->getMessages();
+    foreach($arrMessages as $field => $arrErrors) { ?>
+        <?=$this->formErrors($arrErrors)?>  
+    <?php }} ?>  
+</div>
+    <?=$this->form?>

@@ -30,9 +30,11 @@ class Model_DbTable_Event extends Zend_Db_Table_Abstract
 			                            and pp.user_id = f.user_id)
 			      and e.date >= :bDate
 			      and e.date <= :eDate
-            order by is_mine, date     
+            order by date     
         ", array("userID"=>$userID, "bDate"=>$bDate, "eDate"=>$eDate));   
         
         return $result;
     }	
+	
+	
 }

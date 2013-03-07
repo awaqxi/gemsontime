@@ -32,4 +32,45 @@ class EventsController extends Zend_Controller_Action
                
         return $response->setBody(Zend_Json::encode($objects));
 	}
+	
+	public function subscribeAction()
+	{
+		$userID = $this->getRequest()->getParam("userID");
+		$eventID = $this->getRequest()->getParam("eventID");
+		
+		$this->_helper->viewRenderer->setNoRender(true);
+		$this->_helper->layout()->disableLayout(); 
+        $response = $this->getResponse();
+		
+		$isUserExists = Model_User::isUserExists($userID);
+		if(!$isUserExists)
+		{
+			$data = array('result' => 'user not exists');
+			return $response->setBody(Zend_Json::encode($data));
+		}
+		
+		$isEventExists = Model_Event::isEventExists($eventID);
+		if(!$isEventExists)
+		{
+			$data = array('result' => 'event not exists');
+			return $response->setBody(Zend_Json::encode($data));
+		}
+		
+		$isUserEventParticipant = Model_EventParticipant::isUserEventParticipant($userID, $eventID);
+		if($isUserEventParticipant)
+		{
+			$data = array('result' => 'user is already subscribed');
+			return $response->setBody(Zend_Json::encode($data));
+		}
+		else
+		{
+			Model_EventParticipant::subscribe($userID, $eventID);
+			$data = array('result' => 'OK');			
+			return $response->setBody(Zend_Json::encode($data));
+		}		
+		
+		
+		
+		
+	}
 }

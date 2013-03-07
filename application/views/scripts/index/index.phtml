@@ -1,3 +1,14 @@
+<?php 
+    if(!$this->isAuthorised)
+    {
+        echo('<a href="auth/login">Войти</a>'); 
+        echo('<a style="margin-left: 15px;" href="registration">Регистрация</a>');
+    }
+    else {
+        echo('<a href="auth/logout">Выход</a>');
+    }
+        
+?>
 <div id="TimeMapContainer">
 	<button id="moveLeft" style="width:40px; height:40px"><<<</button> 
 	<button id="moveCenter" style="width:40px; height:40px;">((()))</button>
