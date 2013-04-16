@@ -3,25 +3,24 @@
 <html>
 	<head>
 		<?=$this->headMeta(); ?>
-		
+
 		<title>Gems On Fire</title>
 		<?=$this->headLink(); ?>
-		
+
 		<!--[if lt IE 9]>
 		  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 		<?=$this->headScript(); ?>
-		
+
 	</head>
 	<body>
-		<div id='wrapper'>
-			<header>
-				<center><h1>Gems On Time</h1></center>				
-			</header>	
-			<?= $this->layout()->content;?>
-			<footer>
-				<b>Gems on Time</b>
-			</footer>
-		</div>
+        <header>
+            <center><h1>Gems On Time</h1></center>
+        </header>
+        <?= $this->layout()->content;?>
+        <footer>
+            <center><b>Gems on Time</b></center>
+        </footer>
+        <script src="<?=$this->serverUrl()?>/assets/js/lib/jquery.overscroll.min.js"></script>
 	</body>
 </html>

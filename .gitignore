@@ -3,3 +3,4 @@
 /tests/
 *.cache
 *.log
+/.idea/

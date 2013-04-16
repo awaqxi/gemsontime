@@ -31,11 +31,11 @@
 			$view->headLink()->appendStylesheet($view->serverUrl().'/assets/css/style.css')
 			                 ->appendStylesheet($view->serverUrl().'/assets/css/bootstrap.min.css')
 							 ->headLink(array('rel' => 'icon', 'href' => 'assets/ico/favicon.ico'), 'PREPEND');
-							 
-			$view->headScript()->appendFile('http://code.jquery.com/jquery-latest.js', 'text/javascript')
-			                   ->appendFile($view->serverUrl() . '/assets/js/bootstrap.min.js', 'text/javascript')
-							   ->appendFile($view->serverUrl() . '/assets/js/jquery.overscroll.min.js', 'text/javascript');
-				 
+
+			$view->headScript()->appendFile($view->serverUrl() . '/assets/js/lib/jquery-1.9.1.min.js', 'text/javascript')
+			                   ->appendFile($view->serverUrl() . '/assets/js/lib/bootstrap.min.js', 'text/javascript')
+                               ->appendFile($view->serverUrl() . '/assets/js/lib/moment.min.js', 'text/javascript');
+
 							 
 		}
 		

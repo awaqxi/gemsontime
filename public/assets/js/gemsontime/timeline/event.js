@@ -1,4 +1,7 @@
-function Event(){}
+function Event(entry)
+{
+    this._init(entry);
+}
 
 Event.prototype = {
 	id: 0,
@@ -6,13 +9,16 @@ Event.prototype = {
 	isMine: 0,
 	date: '',
 	groupCSS: '',
-	xBegin: 0,
-	init: function(entry){
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+
+	_init: function(entry){
 		this.id = entry['id'];
 		this.name = entry['name'];
 		this.isMine = entry['isMine'];
 		this.date = entry['date'];
-		this.xBegin = entry['xBegin'];
 		for (var key in entry['groupsTypes']) {
 			
 			if(entry['groupsTypes'][key]['isMain'] === '1')
@@ -20,8 +26,9 @@ Event.prototype = {
 				this.groupCSS = entry['groupsTypes'][key]['groupCSS'];
 			}				
 		}
+        return this;
 	},
-	//отображение события
+
 	render: function(){
 		
 		var id = this.id;
@@ -33,7 +40,13 @@ Event.prototype = {
 			element.addClass(this.groupCSS);     
 		}       
 
-		element.css("left",this.xBegin);
+		element.css("left", this.left);
+        element.css("width", this.width);
+        element.css("height", this.height);
+
+        if(this.top != 0){
+            element.css("top", this.top)
+        };
 
 		//название        
 		var name = $('<span>', {class: 'event_name'}).html(this.name);	
@@ -49,6 +62,7 @@ Event.prototype = {
 		}	
 		var date = $('<span>', {class: 'event_date'}).html(this.date);
 		element.append(date);
+        element.data("object", this);
 		return element;
 	}
 }
