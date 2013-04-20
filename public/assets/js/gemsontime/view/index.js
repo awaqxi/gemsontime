@@ -2,7 +2,7 @@ $(document).ready(function() {
     var timeline = $('#timeline').timeline();
 
     $("#screen").overscroll({
-        captureWheel: false,
+        //captureWheel: false,
         showThumbs: false,
         direction: 'horizontal',
         scrollLeft: -1 * (timeline.data("timeline").getMarginFromMinDateForOverscroll())
