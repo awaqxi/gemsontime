@@ -8,7 +8,7 @@
             pixelPerMinute:   1,
             urlGetEvents:     "/events/1",
             eventCardWidth:   140,
-            eventCardHeight:  65,
+            eventCardHeight:  100,
             verticalEventGap: 15,
             verticalLineGap:  20,
             //колво экранов в сторону от правого и левого концов - загружаемый отрезок

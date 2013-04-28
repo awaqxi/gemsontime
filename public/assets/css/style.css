@@ -29,6 +29,7 @@ footer{
     -webkit-border-radius: 10px;
     border: 2px solid black;
     padding: 2px;
+    text-align:center;
 }
 
 #timeline div.scale{

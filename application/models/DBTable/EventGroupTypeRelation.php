@@ -9,7 +9,7 @@ class Model_DbTable_EventGroupTypeRelation extends Zend_Db_Table_Abstract
 		$dbAdapter = $this->getAdapter();
 		
         $result = $dbAdapter->fetchAll("
-            select gtr.id,
+            select distinct gtr.id,
                    gtr.event_id,
                    g.name as group_name,
                    g.css as group_css,
