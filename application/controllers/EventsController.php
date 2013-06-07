@@ -33,6 +33,35 @@ class EventsController extends Zend_Controller_Action
         return $response->setBody(Zend_Json::encode($objects));
 	}
 	
+	public function getideasAction()
+	{
+		//TODO сделать получение userID из сессии, а не из параметра запроса
+		$events = Model_Event::getUserIdeas($this->getRequest()->getParam("userID"), 
+		                                     $this->getRequest()->getParam("pDate"));
+        
+        $objects = array();
+        foreach ($events as $event) {
+            $objects[] = $event->getArray();
+        }        
+
+        $this->_helper->viewRenderer->setNoRender(true);
+		$this->_helper->layout()->disableLayout(); 
+        $response = $this->getResponse();
+               
+        return $response->setBody(Zend_Json::encode($objects));
+	}
+	
+	public function importAction()
+	{
+		$events = Model_Event::importEvents();        
+
+        $this->_helper->viewRenderer->setNoRender(true);
+		$this->_helper->layout()->disableLayout(); 
+        $response = $this->getResponse();
+               
+        return $response->setBody("[]");
+	}
+	
 	public function subscribeAction()
 	{
 		$userID = $this->getRequest()->getParam("userID");

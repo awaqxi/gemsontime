@@ -7,3 +7,14 @@ div.advance
 {
 	background-color: #FF6633;
 }
+
+.event_shadow{
+	background-color: blue;
+    position: absolute;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border: 2px solid black;
+    padding: 2px;
+    text-align:center;
+}

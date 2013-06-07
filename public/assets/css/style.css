@@ -8,13 +8,66 @@ html, body{
 
 #screen{
     min-height: 70%;
-    overflow: hidden;}
+   	overflow: hidden;
+}
+
 
 footer{
-    height: 40px;
+    height: 147px;
     position: absolute;
     bottom: 0px;
     width: 100%;
+    overflow-y: scroll;
+}
+
+
+#marker{
+    height: 20px;
+    width: 130px;
+    background-color: lightblue;
+    top: 70px;
+}
+
+
+#ideas{
+    height: 120px;
+    position: absolute;
+	width: 3000px;
+    background-color: lightblue;
+    padding: 5px;
+    overflow: scroll;
+}
+
+#ideas div.idea{
+	height: 100px;
+    display: block;
+    float: left;
+
+	margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+     
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border: 2px solid black;
+    padding: 2px;
+    text-align:center;
+/*    background-color: yellow;*/
+}
+
+#timeline div.idea_shadow{
+	height: 100px;
+    position: absolute;
+    background-color: yellow;
+    opacity: .6;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border: 2px solid black;
+    padding: 2px;
+    text-align:left;
 }
 
 #timeline{
@@ -30,6 +83,12 @@ footer{
     border: 2px solid black;
     padding: 2px;
     text-align:center;
+    
+/*    background-color: green;*/
+}
+
+#timeline div.event_shadow{
+    background-color: lightgreen;
 }
 
 #timeline div.scale{

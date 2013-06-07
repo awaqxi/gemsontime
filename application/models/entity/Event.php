@@ -2,7 +2,7 @@
     
 class Model_Entity_Event
 {
-    private $id, $name, $date, $isMine, $userRel, $venueId, $venueName, $groupsTypes = array();
+    private $id, $name, $startdate, $enddate, $isMine, $userRel, $venueId, $venueName, $timeType, $groupsTypes = array();
 		
     public function setID($value)
     {
@@ -24,14 +24,24 @@ class Model_Entity_Event
 		return $this->name;
 	}
 	
-	public function setDate($value)
+	public function setStartDate($value)
 	{
-		$this->date = $value;
+		$this->startdate = $value;
 	}
 	
 	public function getDate()
 	{
-		return $this->date;
+		return $this->startdate;
+	}
+	
+	public function setEndDate($value)
+	{
+		$this->enddate = $value;
+	}
+	
+	public function getEndDate()
+	{
+		return $this->enddate;
 	}
 	
 	public function setIsMine($value)
@@ -73,6 +83,16 @@ class Model_Entity_Event
     {
         return $this->userRel;
     }
+	
+	public function setTimeType($value)
+    {
+        $this->timeType = $value;
+    }
+    
+    public function getTimeType()
+    {
+        return $this->timeType;
+    }
 
 	public function setGroupsTypes($value)
 	{
@@ -94,10 +114,12 @@ class Model_Entity_Event
         $values = array("id" => $this->id, 
                         "name" => $this->name, 
                         "isMine" => $this->isMine, 
-                        "date" => $this->date,
+                        "startdate" => $this->startdate,
+                        "enddate" => $this->enddate,
                         "venueId" => $this->venueId,
                         "venueName" => $this->venueName,
                         "userRel" => $this->userRel,
+                        "timeType" => $this->timeType,
 						"groupsTypes" => $this->groupsTypes);
                         
         return ($values);

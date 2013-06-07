@@ -7,10 +7,15 @@
             monthsToMaxDate:  1,
             pixelPerMinute:   1,
             urlGetEvents:     "/events/1",
+            urlGetIdeas:     "/events/ideas/1",
             eventCardWidth:   140,
+            eventCardWidthMax:   300,
+            eventCardWidthMin: 100,
             eventCardHeight:  100,
             verticalEventGap: 15,
             verticalLineGap:  20,
+            ideaWidth:		  200,
+            ideaPeriod: 	  50,
             //колво экранов в сторону от правого и левого концов - загружаемый отрезок
             screensToLoad: 1.5
         }, options);
@@ -79,6 +84,20 @@
             var margin = (date.diff(minDate, 'minutes') * settings.pixelPerMinute);
             return(margin);
         }
+        
+        var getRandLeftInInterval = function(event,dbeg,dend)
+        {
+        	var dbeg = moment(dbeg);
+            var dend = moment(dend);
+            var diff = dend.diff(dbeg, 'minutes');
+            
+            var left = Math.random() * diff;
+            
+            var randDate = moment(dbeg).add('minutes', left);
+
+            var margin = getMarginFromMinDate(randDate);
+            return(margin);
+        }
 
         this.getMarginFromMinDateForOverscroll = function(date)
         {
@@ -88,17 +107,38 @@
         this.load = function(position)
         {
             loader.adjustPositionAndLoad(position - halfWindowWidth);
+            
+            var screenCenter = getScreenCenterDate(position);
+            
+            loader.fillIdeas(screenCenter);
+        }
+        
+        var getScreenCenterDate = function(position)
+        {
+            var ScreenCenter = position - halfWindowWidth;
+            
+            var screenCenterDate = getDateFromPosition(ScreenCenter);
+
+            $("#marker").text(moment(screenCenterDate).format('DD.MM.YYYY HH:mm'));
+            
+            return screenCenterDate;
+        }
+        
+        var getDateFromPosition = function(position)
+        {
+            return moment(settings.minDate).add('minutes', position);
         }
 
         var eventsRegistry = {
             events: [],
+            
             add : function(event)
             {
                 if(this.events[event.id] === undefined){
                     this.events[event.id] = event;
 
                     event.width = settings.eventCardWidth;
-                    event.height = settings.eventCardHeight
+                    event.height = settings.eventCardHeight;
                     this._appendToLine(event);
                 }
             },
@@ -107,15 +147,55 @@
             {
                 this._calcEventLeft(event);
                 this._calcEventTop(event);
+                this._calcEventWidth(event);
                 var line = getLine(event.isMine);
                 line.appendEvent(event.render());
+                
+                if(event.needShadow){
+                	line.appendEvent(event.renderShadow());
+                }
+                
+                this._checkOpacity(event);
+                
                 line.adjustHeight(event);
             },
 
             _calcEventLeft: function(event)
             {
-                var date = moment(event.date);
-                event.left = getMarginFromMinDate(date);
+				var date = moment(event.startdate);
+				event.left = getMarginFromMinDate(date);
+            },
+            
+            _checkOpacity: function(event)
+            {
+            	//если событие неопределенное, то делаем его полупрозрачным
+            	//TODO ввести признак Неопределенности, иметь его в объекте события 
+            	if(event.id==1){
+					$("#event_"+event.id).css("opacity", 0.5);
+				}
+            },
+            
+            _calcEventWidth: function(event)
+            {
+                var startdate = moment(event.startdate);
+                var enddate = moment(event.enddate);
+                
+                if(enddate!=null) {
+                	var duration = enddate.diff(startdate, 'minutes');
+                	event.duration = duration;
+                	
+	            	var width = duration * settings.pixelPerMinute;
+	            	
+	            	if(width>settings.eventCardWidthMax) {
+	            		event.width = settings.eventCardWidthMax;
+	            		event.actualWidth = width;
+	            		event.needShadow = true;
+	            	} else if(width<settings.eventCardWidthMin) {
+	            		event.width = settings.eventCardWidthMin;
+	            		event.actualWidth = width;
+	            	} else
+	            		event.width = width;
+	            }
             },
 
             _calcEventTop: function(event)
@@ -154,12 +234,27 @@
                 var items = [];
                 var bDateInp = getMarginFromMinDate(bDate);
                 var eDateInp = getMarginFromMinDate(eDate);
+                var j=0;	// счетчик для времени. i - счетчик для координаты
+                
                 for(var i = bDateInp; i < eDateInp; i = i + step){
                     var element = $('<div>');
+                    var newDate = moment(bDate).add('minutes', j);
+                    var hour = newDate.hour();
+                    
+                    if(hour=="0") {
+                    	var text = newDate.format('DD.MM')+": "+hour;
+                    	element.css('background-color', "orange");
+                    }
+                    else
+                    	var text = hour;
+                    	  
                     element.css('left', i)
                         .css('width', step)
-                        .html(moment(bDate).add('minutes', i).hour());
+                        .html(text);
+                    
                     items.push(element);
+                    
+                    j = j + step;
                 }
                 this.element.append(items);
             }
@@ -177,11 +272,22 @@
                 this.endPosition = begin + this._delta;
 
                 this._load(this.beginPosition, this.endPosition);
+                
+                var position = (this.endPosition-this.beginPosition)/2+this.beginPosition;
+                var screenCenter = getScreenCenterDate(position);
+                
+	            loader.fillIdeas(screenCenter);
+                
                 return this;
+            },
+            
+            fillIdeas: function(screenCenter)
+            {
+            	ideasRegistry.fillIdeas(screenCenter);
             },
 
             _load: function(beginPosition, endPosition)
-            {
+            {            	
                 var bDate = this._getDate(beginPosition);
                 var eDate = this._getDate(endPosition);
                 timeScale.renderByPeriod(bDate, eDate);
@@ -210,13 +316,131 @@
             {
                 if(position < this.beginPosition){
                     this._load(position - this._delta, this.beginPosition);
+                    
                     this.beginPosition = position - this._delta;
                 }else if(position > this.endPosition){
                     this._load(this.endPosition, position + this._delta);
                     this.endPosition = position + this._delta;
                 }
+            },
+
+            
+            loadAndFillIdeas: function(screenCenterDate)
+            {
+            	var pDate = moment(screenCenterDate).format('YYYY-MM-DD HH');
+            	
+                $.ajax({
+                    type: "GET",
+                    url: settings.urlGetIdeas + "/" + pDate,
+                    dataType: "json",
+                    async : true,
+                    success: function(data){
+                        ideasRegistry.saveAndFillIdeas(data,screenCenterDate);
+                    }
+                });
             }
         }
+        
+        var ideasRegistry = {
+            events: {},
+            events_length: 0,
+            
+            bunches_length: 0,
+            iBunches: {},
+            iBunch: {
+            	date: "",
+            	ideas: {}
+            },
+            
+            fillIdeas: function(screenCenterDate)
+            {
+            	var ideasBunch = this.findBunchForDate(screenCenterDate);
+            	
+            	if(ideasBunch===undefined) {
+            		ideas = loader.loadAndFillIdeas(screenCenterDate);
+            	}
+            },
+            
+            saveAndFillIdeas: function(data,screenCenterDate)
+            {
+            	var ideasBunch = this.saveBunch(data,screenCenterDate);
+            	
+            	if(ideasBunch!=undefined)
+            		this.fillIdeasDiv(ideasBunch);
+            },
+            
+            fillIdeasDiv : function(ideasBunch)
+            {
+            	$(".idea").remove();
+            	
+            	for(var i=0; i<ideasBunch.count; i++)
+                    this._append(ideasBunch.ideas[i],ideasBunch.date);
+            },
+            
+            findBunchForDate : function(date)
+            {	
+            	for(var i=0; i<this.bunches_length; i++)
+            	{
+            		if(this.iBunches[i].date==date)
+            			return this.iBunches[i]; 
+            	}
+            },
+            
+            saveBunch : function(data,date)
+            {
+            	var iBunch = {};
+            	iBunch.date=date;
+            	iBunch.ideas={};
+            		
+                $.each(data, function(i, event){
+                    var eventObj = new Event(event);
+                    
+                    iBunch.ideas[i]=eventObj;
+                    iBunch.count=i+1;
+                });
+                
+                this.iBunches[this.bunches_length]=iBunch;
+                this.bunches_length++;
+                
+                return iBunch;
+            },
+
+            _append: function(event,date)
+            {
+                var Ideas = $("#ideas");
+                event.width = settings.ideaWidth;
+                
+                var idea = event.renderIdea();
+                
+                idea.css("left", (this.events_length-1)*(settings.ideaWidth+settings.ideaPeriod));
+                
+                Ideas.append(idea);
+                
+                // рассчитаем параметры для тени на таймлайн, аналогичные рассчитываются 
+                var startdate = moment(event.startdate);
+				event.left = getMarginFromMinDate(startdate);
+				
+                var enddate = moment(event.enddate);
+	            if(enddate!=null) {
+                	var duration = enddate.diff(startdate, 'minutes');
+                	event.duration = duration;
+                	
+	            	var width = duration * settings.pixelPerMinute;
+	            	
+	            	if(width>settings.eventCardWidthMax) {
+	            		event.width = settings.eventCardWidthMax;
+	            		event.actualWidth = width;
+	            		event.needShadow = true;
+	            	} else if(width<settings.eventCardWidthMin) {
+	            		event.width = settings.eventCardWidthMin;
+	            		event.actualWidth = width;
+	            	} else
+	            		event.width = width;
+	            }
+				
+               	lineMine.appendEvent(event.renderIdeaShadow());
+            }
+		}
 
         init();
     }
@@ -235,12 +459,3 @@
         });
     };
 })(jQuery);
-
-
-
-
-
-
-
-
-

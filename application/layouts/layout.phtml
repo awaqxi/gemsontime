@@ -4,7 +4,7 @@
 	<head>
 		<?=$this->headMeta(); ?>
 
-		<title>Gems On Fire</title>
+		<title>Gems On Time</title>
 		<?=$this->headLink(); ?>
 
 		<!--[if lt IE 9]>
@@ -16,10 +16,14 @@
 	<body>
         <header>
             <center><h1>Gems On Time</h1></center>
+            <!-- <button id="import_events">IMPORT</button> -->
         </header>
         <?= $this->layout()->content;?>
         <footer>
-            <center><b>Gems on Time</b></center>
+        	<center><div id="marker"></div></center>
+        	<div id="ideas">
+			</div>
+            <!-- <center><b>Gems on Time</b></center> -->
         </footer>
         <script src="<?=$this->serverUrl()?>/assets/js/lib/jquery.overscroll.min.js"></script>
 	</body>
