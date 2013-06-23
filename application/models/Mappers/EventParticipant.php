@@ -1,6 +1,6 @@
 <?php
     
-class Model_EventParticipant
+class Model_Mapper_EventParticipant
 {
 	public static function isUserEventParticipant($userID, $eventID)
 	{

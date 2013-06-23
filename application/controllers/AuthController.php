@@ -27,21 +27,12 @@ class AuthController extends Zend_Controller_Action
             
             if($form->isValid($formData)){
                 $data = $form->getValues();
-                $authAdapter = $this->getAuthAdapter(); 
-                
                 $user = $data['name'];
                 $pass = $data['password'];
-                $authAdapter->setIdentity($user)
-                            ->setCredential($pass);
-                
-                $auth = Zend_Auth::getInstance();
-                $result = $auth->authenticate($authAdapter);
-                if($result->isValid())
-                {   
-                    $identity = $authAdapter->getResultRowObject();
-                    $authStorage = $auth->getStorage();
-                    $authStorage->write($identity);
-                    
+
+                $result = Model_Auth::getInstance()->login($user, $pass);
+
+                if($result){
                     $this->redirect('');   
                 }
                 else {
@@ -62,16 +53,5 @@ class AuthController extends Zend_Controller_Action
     {
         Zend_Auth::getInstance()->clearIdentity();
         $this->redirect('auth/login');
-    }
-    
-    private function getAuthAdapter()
-    {
-        $authAdapter = new Zend_Auth_Adapter_DbTable(Zend_Db_Table::getDefaultAdapter());
-        $authAdapter->setTableName('user')
-                    ->setIdentityColumn('name')
-                    ->setCredentialColumn('password')
-                    ->setCredentialTreatment('MD5(CONCAT(name,?))');
-                    
-        return $authAdapter;
     }
 }

@@ -39,7 +39,7 @@ class RegistrationController extends Zend_Controller_Action
 		$user->setPassword(md5($data['name'] . $data['password']));
 		$user->setcheckSum(md5($data['name'] . time()));
 		//получаем объект user - уже с ИД в базе
-		$user = Model_User::createUser($user);
+		$user = Model_Mapper_User::createUser($user);
 		
 		$this->_forward('thankyou','registration', null, array('user'=>$user));
 	}
@@ -73,9 +73,9 @@ class RegistrationController extends Zend_Controller_Action
 		$checkSum = $this->getRequest()->getParam('checkSum');
 		$userID = $this->getRequest()->getParam('userID');
 		
-		if(Model_User::isCheckSumExists($userID, $checkSum))
+		if(Model_Mapper_User::isCheckSumExists($userID, $checkSum))
 		{
-			Model_User::setUserConfirmed($userID);
+            Model_Mapper_User::setUserConfirmed($userID);
 		}
 		else
 		{

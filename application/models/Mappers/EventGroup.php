@@ -1,6 +1,6 @@
 <?php
     
-class Model_EventGroup
+class Model_Mapper_EventGroup
 {
 	public static function getGroups()
 	{

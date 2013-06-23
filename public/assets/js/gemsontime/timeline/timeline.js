@@ -5,7 +5,7 @@
         var settings = $.extend({
             minDate:          "2013-04-01",
             monthsToMaxDate:  1,
-            pixelPerMinute:   1,
+            pixelPerMinute: 1,
             urlGetEvents:     "/events/1",
             urlGetIdeas:     "/events/ideas/1",
             eventCardWidth:   140,
@@ -210,6 +210,8 @@
                         var currentEventEnd = parseInt(num.left) + parseInt(settings.eventCardWidth);
                         //ищем события которые находятся на одной линии с текущим и которые по своему местоположению
                         // пересекают его
+
+                        //здесь есть баг в случае когда три события в одно время
                         return num.isMine === eventIsMine &&
                             num.id !== eventId &&
                             ((currentEventBegin >= eventBegin &&
@@ -270,7 +272,6 @@
                 var begin = getMarginFromMinDate(moment());
                 this.beginPosition = begin - this._delta;
                 this.endPosition = begin + this._delta;
-
                 this._load(this.beginPosition, this.endPosition);
                 
                 var position = (this.endPosition-this.beginPosition)/2+this.beginPosition;

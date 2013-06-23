@@ -1,12 +1,12 @@
 <?php
     
-class Model_Event
+class Model_Mapper_Event
 {
 	public static function getUserEvents($userID, $bDate, $eDate)
 	{
 		$events_table = new Model_DbTable_Event();		
         $result = $events_table->getUserEvents($userID, $bDate, $eDate);
-       
+
         $events = array();
 		$eventsIDs = array();
 		// т.к. у юзера может быть несклько отношений с событием (сохранил, пойдет и т.д.), то события дублируются в этой выборке
@@ -43,7 +43,7 @@ class Model_Event
 		// т.к. у юзера может быть несклько отношений с событием (сохранил, пойдет и т.д.), то события дублируются в этой выборке
 		// но перетираются в правильном порядке за счет iorder desc
         foreach ($result as $object) {            
-			$event = Model_Event::getEntity($object);			
+			$event = Model_Mapper_Event::getEntity($object);
             $events[$object['id']] = $event;			
 			//зпоминаем ид всех событий
 			$eventsIDs[] = $object['id'];
@@ -51,7 +51,7 @@ class Model_Event
 		if(count($eventsIDs) > 0)
 		{
 			//выбираем группы и типы событий
-	        $event_groups_types = Model_Event::getEventGroupTypeRelation($eventsIDs);
+	        $event_groups_types = Model_Mapper_Event::getEventGroupTypeRelation($eventsIDs);
 			foreach ($event_groups_types as $object) 
 			{
 				$eventID = $object['event_id'];

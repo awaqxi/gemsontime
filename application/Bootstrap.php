@@ -7,8 +7,7 @@
 			$modelLoader = new Zend_Application_Module_Autoloader(array(
                                'namespace' => '',
 							   'basePath' => APPLICATION_PATH));
-			return $modelLoader;				   
-			
+			return $modelLoader;
 		}
 		
 		public function _initRoute()

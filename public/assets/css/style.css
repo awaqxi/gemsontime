@@ -8,9 +8,14 @@ html, body{
 
 #screen{
     min-height: 70%;
+<<<<<<< HEAD
    	overflow: hidden;
 }
 
+=======
+    overflow: hidden;
+    display: none}
+>>>>>>> no js events show; Auth
 
 footer{
     height: 147px;

@@ -11,7 +11,10 @@ function importEvents(){
 }
 
 $(document).ready(function() {
-	var timeline = $('#timeline').timeline();
+
+    $('[date-events-no-js="1"]').hide();
+    $('[date-events-screen="1"]').show();
+    var timeline = $('#timeline').timeline();
 
 	$("#screen").overscroll({
 		//captureWheel: false,

@@ -126,7 +126,7 @@ class Model_DbTable_Event extends Zend_Db_Table_Abstract
 		order by id, iorder desc
 			
         ", array("userID"=>$userID, "bDate"=>$bDate, "eDate"=>$eDate));   
-        
+
         return $result;
     }
 

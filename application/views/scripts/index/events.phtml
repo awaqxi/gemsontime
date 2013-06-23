@@ -1,0 +1,16 @@
+<?
+    $this->headScript()->appendFile($this->serverUrl() . '/assets/js/gemsontime/timeline/timeline.js', 'text/javascript')
+                       ->appendFile($this->serverUrl() . '/assets/js/gemsontime/timeline/event.js', 'text/javascript')
+                       ->appendFile($this->serverUrl() . '/assets/js/gemsontime/view/index.js', 'text/javascript');
+    $this->headLink()->appendStylesheet($this->serverUrl().'/assets/css/events.css');
+?>
+
+<?=$this->partial("index/events-no-js.php", array("events" => $this->events,
+                                                  "bDate" => $this->bDate,
+                                                  "eDate" => $this->eDate));?>
+
+</div>
+<div date-events-screen="1" id = 'screen'>
+    <div id = 'timeline'>
+    </div>
+</div>
